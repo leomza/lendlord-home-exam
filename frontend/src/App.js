@@ -1,15 +1,42 @@
-import logo from './assets/lendlord.png'
-import './App.css';
+import React, { useState, useEffect } from 'react'
+import './App.css'
+import Header from './components/Header'
+import UserTable from './components/UserTable'
+import AddUser from './components/AddUser'
 
-function App() {
+import axios from 'axios'
+
+function App () {
+  const [user, setUser] = useState([])
+  const [manager, setManager] = useState([])
+
+  useEffect(() => {
+    try {
+      getData()
+    } catch (error) {
+      console.error(error)
+    }
+  }, [])
+
+  const getData = async () => {
+    const allUsers = await axios.get(`http://localhost:3000/getUsers`)
+    setUser(allUsers.data)
+
+    const allManagers = allUsers.data.filter(user => user.role === 'manager')
+    setManager(allManagers)
+  }
+
+  const sortingTable = tableSort => {
+    setUser(tableSort)
+  }
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} width={'200px'} alt={'logo'} />
-      </header>
-    </div>
-  );
+    <>
+      <Header />
+      <AddUser {...{ getData, manager }} />
+      <UserTable {...{ user, getData, sortingTable, manager }} />
+    </>
+  )
 }
 
-export default App;
+export default App
