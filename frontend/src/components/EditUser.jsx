@@ -219,7 +219,7 @@ const EditUser = ({ showEdit, userToEdit, handleClose, getData, manager }) => {
               <Form.Select
                 name='role'
                 id='role'
-                defaultValue={role}
+                value={userData.role}
                 onChange={onChange}
                 required
               >
