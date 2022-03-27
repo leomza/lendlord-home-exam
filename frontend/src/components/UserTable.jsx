@@ -173,7 +173,7 @@ const UserTable = ({ user, getData, sortingTable, manager }) => {
 
   return (
     <>
-      <Table striped bordered hover responsive='xl' variant='dark'>
+      <Table className="text-center" striped bordered hover responsive='xl' variant='dark'>
         <thead>
           <tr>
             <th onClick={() => sortData('firstName')}>

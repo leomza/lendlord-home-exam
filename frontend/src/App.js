@@ -4,6 +4,7 @@ import Header from './components/Header'
 import UserTable from './components/UserTable'
 import AddUser from './components/AddUser'
 import Filter from './components/Filter'
+import ErrorBoundary from './components/ErrorComponent'
 
 import axios from 'axios'
 
@@ -49,12 +50,14 @@ function App () {
 
   return (
     <>
-      <Header />
-      <div className='d-flex justify-content-around mt-4 mb-4'>
-        <AddUser {...{ getData, manager }} />
-        <Filter className='w-50' {...{ manager, setUser, handleFilter }} />
-      </div>
-      <UserTable {...{ user, getData, sortingTable, manager }} />
+      <ErrorBoundary>
+        <Header />
+        <div className='d-flex justify-content-around mt-4 mb-4'>
+          <AddUser {...{ getData, manager }} />
+          <Filter className='w-50' {...{ manager, setUser, handleFilter }} />
+        </div>
+        <UserTable {...{ user, getData, sortingTable, manager }} />
+      </ErrorBoundary>
     </>
   )
 }

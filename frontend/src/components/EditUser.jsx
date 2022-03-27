@@ -145,7 +145,9 @@ const EditUser = ({ showEdit, userToEdit, handleClose, getData, manager }) => {
           <Modal.Title>Edit user</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {warning ? <Error message="Please use the filters to check if this Manager doesn't have any employee under his charge" /> : null}
+          {warning ? (
+            <Error message="Please use the filters to check if this Manager doesn't have any employee under his charge" />
+          ) : null}
 
           <Form onSubmit={onSubmit}>
             <Form.Group as={Col}>
@@ -238,8 +240,6 @@ const EditUser = ({ showEdit, userToEdit, handleClose, getData, manager }) => {
                 defaultValue={managerId}
                 onChange={onChange}
               >
-                <option value={''}>No selected</option>
-
                 {manager.map(item => (
                   <option key={item._id} value={item._id}>
                     {item.firstName} {item.lastName}
