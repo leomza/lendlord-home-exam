@@ -3,20 +3,26 @@ import './App.css'
 import Header from './components/Header'
 import UserTable from './components/UserTable'
 import AddUser from './components/AddUser'
+import Filter from './components/Filter'
 
 import axios from 'axios'
 
 function App () {
   const [user, setUser] = useState([])
   const [manager, setManager] = useState([])
+  const [filter, setFilter] = useState('')
 
   useEffect(() => {
     try {
-      getData()
+      if (filter !== '') {
+        filterData()
+      } else {
+        getData()
+      }
     } catch (error) {
       console.error(error)
     }
-  }, [])
+  }, [filter])
 
   const getData = async () => {
     const allUsers = await axios.get(`http://localhost:3000/getUsers`)
@@ -26,14 +32,28 @@ function App () {
     setManager(allManagers)
   }
 
+  const filterData = async () => {
+    const usersFiltered = await axios.get(
+      `http://localhost:3000/getManagerAndEmployees/${filter}`
+    )
+    setUser(usersFiltered.data.inCharge)
+  }
+
   const sortingTable = tableSort => {
     setUser(tableSort)
+  }
+
+  const handleFilter = managerId => {
+    setFilter(managerId)
   }
 
   return (
     <>
       <Header />
-      <AddUser {...{ getData, manager }} />
+      <div className='d-flex justify-content-around mt-4 mb-4'>
+        <AddUser {...{ getData, manager }} />
+        <Filter className='w-50' {...{ manager, setUser, handleFilter }} />
+      </div>
       <UserTable {...{ user, getData, sortingTable, manager }} />
     </>
   )

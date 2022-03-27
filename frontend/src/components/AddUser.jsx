@@ -22,7 +22,6 @@ const AddUser = ({ getData, manager }) => {
       dateStarted: '',
       salary: '',
       role: '',
-      managerId: ''
     })
   }
 
@@ -78,30 +77,34 @@ const AddUser = ({ getData, manager }) => {
       } else {
         setErrorLastName(false)
       }
+
       if (user.email.trim() === '') {
         setErrorEmail(true)
         return
       } else {
         setErrorEmail(false)
       }
+
       if (isNaN(user.salary)) {
         setErrorSalary(true)
         return
       } else {
+        setErrorSalary(false)
       }
-      setErrorSalary(false)
+
       if (user.role.trim() === '') {
         setErrorRole(true)
         return
       } else {
+        setErrorRole(false)
       }
-      setErrorRole(false)
+
       if (user.managerId.trim() === '' && user.role !== 'manager') {
         setErrorManagerId(true)
         return
       } else {
+        setErrorManagerId(false)
       }
-      setErrorManagerId(false)
 
       const result = await axios.post(`http://localhost:3000/newUser`, user)
       swal('Yes!', result.data, 'success')

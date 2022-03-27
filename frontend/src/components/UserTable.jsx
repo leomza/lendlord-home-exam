@@ -11,20 +11,24 @@ const UserTable = ({ user, getData, sortingTable, manager }) => {
   const [userToEdit, setUserToEdit] = useState()
   const [showEdit, setShowEdit] = useState(false)
 
-  const deleteUser = async userId => {
+  const deleteUser = async user => {
     try {
-      swal({
-        title: 'Are you sure?',
-        text: 'Once you delete, you will not be able to recover this user!',
-        icon: 'warning',
-        buttons: true,
-        dangerMode: true
-      }).then(confirmDelete => {
-        if (confirmDelete) {
-          axios.post(`http://localhost:3000/deleteUser/${userId}`)
-          getData()
-        }
-      })
+      if (user.role === 'manager') {
+        swal('No!', 'Impossible to delete a user that is a manager', 'info')
+      } else {
+        swal({
+          title: 'Are you sure?',
+          text: 'Once you delete, you will not be able to recover this user!',
+          icon: 'warning',
+          buttons: true,
+          dangerMode: true
+        }).then(confirmDelete => {
+          if (confirmDelete) {
+            axios.post(`http://localhost:3000/deleteUser/${user._id}`)
+            getData()
+          }
+        })
+      }
     } catch (error) {
       console.error(error)
     }
@@ -161,6 +165,12 @@ const UserTable = ({ user, getData, sortingTable, manager }) => {
 
   const handleShow = () => setShowEdit(true)
 
+  const searchManager = managerId => {
+    let managerPerson = manager.find(person => person._id === managerId)
+    if (managerPerson)
+      return `${managerPerson.firstName} ${managerPerson.lastName}`
+  }
+
   return (
     <>
       <Table striped bordered hover responsive='xl' variant='dark'>
@@ -199,7 +209,7 @@ const UserTable = ({ user, getData, sortingTable, manager }) => {
               </td>
               <td className='text-capitalize'>{item.role}</td>
               <td>${item.salary}</td>
-              <td>VER ACA</td>
+              <td>{item.managerId ? searchManager(item.managerId) : null}</td>
               <td>
                 <i
                   role='button'
@@ -209,7 +219,7 @@ const UserTable = ({ user, getData, sortingTable, manager }) => {
                 <i
                   role='button'
                   className='fa fa-fw fa-trash'
-                  onClick={() => deleteUser(item._id)}
+                  onClick={() => deleteUser(item)}
                 ></i>
               </td>
             </tr>

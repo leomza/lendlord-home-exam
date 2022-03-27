@@ -26,7 +26,7 @@ const getAllUsers = async ctx => {
   }
 }
 
-const deleteUser = async (ctx, next) => {
+const deleteUser = async ctx => {
   try {
     await users.deleteUser({
       _id: ctx.params.id
@@ -38,7 +38,7 @@ const deleteUser = async (ctx, next) => {
   }
 }
 
-const getUserInfo = async (ctx, next) => {
+const getUserInfo = async ctx => {
   try {
     const findUser = await users.findUser({
       _id: ctx.params.id
@@ -50,7 +50,7 @@ const getUserInfo = async (ctx, next) => {
   }
 }
 
-const updateUser = async (ctx, next) => {
+const updateUser = async ctx => {
   try {
     await users.updateUser(
       {
@@ -65,4 +65,26 @@ const updateUser = async (ctx, next) => {
   }
 }
 
-module.exports = { addUser, getAllUsers, deleteUser, getUserInfo, updateUser }
+const getManager = async ctx => {
+  try {
+    const findManager = await users.findUser({
+      _id: ctx.params.id
+    })
+    if (findManager) {
+      let inCharge = await users.findUsers({ managerId: ctx.params.id })
+      ctx.body = { manager: findManager, inCharge: inCharge }
+    }
+  } catch (error) {
+    ctx.status = 500
+    ctx.message = 'Something is wrong getting the information of the manager'
+  }
+}
+
+module.exports = {
+  addUser,
+  getAllUsers,
+  deleteUser,
+  getUserInfo,
+  updateUser,
+  getManager
+}

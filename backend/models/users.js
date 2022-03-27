@@ -18,7 +18,7 @@ const schema = new mongoose.Schema(
       default: USER_ROLES.WORKER
     },
     salary: { type: Number, required: true },
-    managerId: { type: SchemaTypes.ObjectId }
+    managerId: { type: String, required: false }
   },
   { strict: false, autoCreate: true, timestamps: true }
 )
