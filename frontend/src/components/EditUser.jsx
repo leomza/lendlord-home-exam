@@ -19,6 +19,7 @@ const EditUser = ({ showEdit, userToEdit, handleClose, getData, manager }) => {
   const [errorSalary, setErrorSalary] = useState(false)
   const [errorRole, setErrorRole] = useState(false)
   const [errorManagerId, setErrorManagerId] = useState(false)
+  const [warning, setWarning] = useState(false)
 
   useEffect(() => {
     try {
@@ -61,6 +62,12 @@ const EditUser = ({ showEdit, userToEdit, handleClose, getData, manager }) => {
         ...userData,
         [e.target.name]: e.target.value
       })
+
+      if (userData.role === 'manager') {
+        setWarning(true)
+      } else {
+        setWarning(false)
+      }
     } catch (error) {
       console.error(error)
     }
@@ -103,20 +110,20 @@ const EditUser = ({ showEdit, userToEdit, handleClose, getData, manager }) => {
         setErrorSalary(true)
         return
       } else {
+        setErrorSalary(false)
       }
-      setErrorSalary(false)
       if (userData.role.trim() === '') {
         setErrorRole(true)
         return
       } else {
+        setErrorRole(false)
       }
-      setErrorRole(false)
       if (userData.managerId.trim() === '' && userData.role !== 'manager') {
         setErrorManagerId(true)
         return
       } else {
+        setErrorManagerId(false)
       }
-      setErrorManagerId(false)
 
       const result = await axios.post(
         `http://localhost:3000/updateUser/${userToEdit}`,
@@ -138,6 +145,8 @@ const EditUser = ({ showEdit, userToEdit, handleClose, getData, manager }) => {
           <Modal.Title>Edit user</Modal.Title>
         </Modal.Header>
         <Modal.Body>
+          {warning ? <Error message="Please use the filters to check if this Manager doesn't have any employee under his charge" /> : null}
+
           <Form onSubmit={onSubmit}>
             <Form.Group as={Col}>
               <Form.Label htmlFor='firstName'>Name</Form.Label>

@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { Form, Row } from 'react-bootstrap'
-import axios from 'axios'
 
 const Filter = ({ manager, handleFilter }) => {
 
