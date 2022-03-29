@@ -4,6 +4,8 @@ const logPath = path.join(logDirPath, 'app.log')
 const { statSync, mkdirSync, writeFileSync } = require('fs')
 const bunyan = require('bunyan')
 const { merge } = require('lodash')
+require('dotenv').config()
+
 
 try {
   statSync(logPath)
@@ -21,7 +23,7 @@ global.log = bunyan.createLogger({
 
 var config = {
   default: {
-    database: 'mongodb://localhost:27017/lendlord_home_exam',
+    database: process.env.DB_MONGO,
     appUrl: 'http://localhost:3002',
     ports: {
       app: 3000
